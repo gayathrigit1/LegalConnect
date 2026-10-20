@@ -1,0 +1,47 @@
+import type { LegalCase } from '../types';
+
+export const mockCases: LegalCase[] = [
+  {
+    id: 'case-1',
+    userId: 'user-1',
+    title: 'Rental deposit recovery (demo)',
+    domain: 'Property',
+    summary: 'Mock case: tenant seeking return of security deposit after lease end.',
+    status: 'in_progress',
+    createdAt: '2026-08-02T10:00:00.000Z',
+    updatedAt: '2026-09-10T12:00:00.000Z',
+    assignedLawyerId: 'lawyer-4',
+  },
+  {
+    id: 'case-2',
+    userId: 'user-1',
+    title: 'Workplace notice-period dispute (demo)',
+    domain: 'Labour',
+    summary: 'Mock case: disagreement over notice period and final settlement.',
+    status: 'open',
+    createdAt: '2026-09-01T08:30:00.000Z',
+    updatedAt: '2026-09-18T09:00:00.000Z',
+  },
+  {
+    id: 'case-3',
+    userId: 'user-1',
+    title: 'Consumer refund for defective appliance (demo)',
+    domain: 'Consumer',
+    summary: 'Mock case: delayed replacement and incomplete refund.',
+    status: 'closed',
+    createdAt: '2026-05-14T07:00:00.000Z',
+    updatedAt: '2026-07-22T16:00:00.000Z',
+    assignedLawyerId: 'lawyer-7',
+  },
+  {
+    id: 'case-4',
+    userId: 'lawyer-user-1',
+    title: 'Mediation support — custody schedule (demo)',
+    domain: 'Family',
+    summary: 'Mock lawyer-side case used on the lawyer dashboard.',
+    status: 'in_progress',
+    createdAt: '2026-07-20T10:00:00.000Z',
+    updatedAt: '2026-09-12T11:00:00.000Z',
+    assignedLawyerId: 'lawyer-1',
+  },
+];

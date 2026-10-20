@@ -1,0 +1,20 @@
+﻿# Java / Spring Boot
+Backend/target/
+Backend/classpath.txt
+Backend/*.class
+Backend/src/main/resources/application.properties
+**/*.local-backup
+
+# Node / React
+**/node_modules/
+**/dist/
+**/.env
+**/.env.*
+!**/.env.example
+
+# IDE and operating system files
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
