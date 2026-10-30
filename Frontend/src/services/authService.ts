@@ -1,8 +1,8 @@
-
 import type { AuthSession, User, UserRole } from '../types';
+import { API_BASE_URL } from './api';
 
 const SESSION_KEY = 'lc_session';
-const API_URL = 'http://localhost:8080/api/auth';
+const API_URL = `${API_BASE_URL}/auth`;
 
 export interface RegisterPayload {
   fullName: string;
@@ -67,7 +67,7 @@ async function post<T>(path: string, payload: unknown): Promise<T> {
     });
   } catch {
     throw new Error(
-      'Cannot connect to the backend. Make sure Spring Boot is running on port 8080.'
+      'Cannot connect to the backend service. Please check your internet connection or verify the backend is running.'
     );
   }
 
