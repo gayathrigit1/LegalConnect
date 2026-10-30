@@ -39,12 +39,16 @@ public class ConsultationService {
     @Transactional
     public ConsultationDto createConsultation(ConsultationRequestPayload request, Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
+        
         UserEntity user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         LawyerEntity lawyer = lawyerRepository.findById(request.getLawyerId())
-                .orElseThrow(() -> new ResourceNotFoundException("Lawyer not found"));
+                .or(() -> lawyerRepository.findByLawyerCode(request.getLawyerId()))
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Lawyer not found for id: " + request.getLawyerId()
+                                + ". Use a lawyer from the database (demo IDs: lawyer-1 … lawyer-8)."
+                ));
 
         ConsultationEntity consultation = new ConsultationEntity();
         consultation.setId(UUID.randomUUID().toString());
@@ -66,11 +70,11 @@ public class ConsultationService {
 
     public List<ConsultationDto> getMyConsultations(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
+        
         if (userPrincipal.getRole().name().equals("LAWYER")) {
             LawyerEntity lawyer = lawyerRepository.findByUserId(userPrincipal.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Lawyer profile not found for this user"));
-
+            
             return consultationRepository.findByLawyerIdOrderByCreatedAtDesc(lawyer.getId())
                     .stream()
                     .map(this::mapToConsultationDto)
@@ -85,7 +89,7 @@ public class ConsultationService {
 
     public ConsultationDto getConsultationById(String consultationId, Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
+        
         ConsultationEntity consultation = consultationRepository.findById(consultationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Consultation not found"));
 
@@ -99,7 +103,7 @@ public class ConsultationService {
     @Transactional
     public ConsultationDto acceptConsultation(String consultationId, Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
+        
         LawyerEntity lawyer = lawyerRepository.findByUserId(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Lawyer profile not found for this user"));
 
@@ -116,14 +120,14 @@ public class ConsultationService {
 
         consultation.setStatus(ConsultationStatus.ACCEPTED);
         consultation = consultationRepository.save(consultation);
-
+        
         return mapToConsultationDto(consultation);
     }
 
     @Transactional
     public ConsultationDto rejectConsultation(String consultationId, Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
+        
         LawyerEntity lawyer = lawyerRepository.findByUserId(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Lawyer profile not found for this user"));
 
@@ -140,13 +144,13 @@ public class ConsultationService {
 
         consultation.setStatus(ConsultationStatus.REJECTED);
         consultation = consultationRepository.save(consultation);
-
+        
         return mapToConsultationDto(consultation);
     }
 
     public List<ConsultationDto> getAllConsultations(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
+        
         if (!userPrincipal.getRole().name().equals("ADMIN")) {
             throw new ForbiddenException("Only admins can view all consultations");
         }
@@ -161,11 +165,11 @@ public class ConsultationService {
         if (userPrincipal.getRole().name().equals("ADMIN")) {
             return true;
         }
-
+        
         if (userPrincipal.getRole().name().equals("USER")) {
             return consultation.getUserId().equals(userPrincipal.getId());
         }
-
+        
         if (userPrincipal.getRole().name().equals("LAWYER")) {
             return consultation.getLawyerId().equals(
                     lawyerRepository.findByUserId(userPrincipal.getId())
@@ -173,7 +177,7 @@ public class ConsultationService {
                             .orElse(null)
             );
         }
-
+        
         return false;
     }
 
@@ -191,6 +195,8 @@ public class ConsultationService {
         dto.setDescription(consultation.getDescription());
         dto.setType(consultation.getType());
         dto.setStatus(consultation.getStatus());
+        dto.setPaymentStatus(consultation.getPaymentStatus() != null ? consultation.getPaymentStatus() : "UNPAID");
+        dto.setPaymentId(consultation.getPaymentId());
         dto.setCreatedAt(consultation.getCreatedAt() != null ? consultation.getCreatedAt().toString() : null);
         return dto;
     }

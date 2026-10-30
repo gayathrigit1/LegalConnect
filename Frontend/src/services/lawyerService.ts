@@ -1,14 +1,30 @@
 import type { Lawyer, LawyerFilters, PaginatedResult, VerificationStatus } from '../types';
 import { mockLawyers } from '../data/lawyers';
-import { delay } from './api';
+import { api, delay } from './api';
 
 export const lawyerService = {
   async list(): Promise<Lawyer[]> {
+    try {
+      const response = await api.get<Lawyer[]>('/lawyers/browse');
+      if (Array.isArray(response.data) && response.data.length > 0) {
+        return response.data;
+      }
+    } catch {
+      // Fallback
+    }
     await delay();
     return [...mockLawyers];
   },
 
   async getById(id: string): Promise<Lawyer | undefined> {
+    try {
+      const response = await api.get<Lawyer>(`/lawyers/${id}`);
+      if (response.data) {
+        return response.data;
+      }
+    } catch {
+      // Fallback
+    }
     await delay(250);
     return mockLawyers.find((lawyer) => lawyer.id === id);
   },

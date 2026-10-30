@@ -77,17 +77,13 @@ public class LawyerService {
     }
 
     /*
-     * Get a lawyer using the public lawyer code.
-     * Example: L0001
+     * Get a lawyer by database ID (e.g. lawyer-1) or public code (e.g. L0001).
      */
     public LawyerDto getLawyerProfile(String lawyerId) {
 
-        LawyerEntity lawyer =
-                lawyerRepository.findByLawyerCode(lawyerId)
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Lawyer not found"
-                                ));
+        LawyerEntity lawyer = lawyerRepository.findById(lawyerId)
+                .or(() -> lawyerRepository.findByLawyerCode(lawyerId))
+                .orElseThrow(() -> new ResourceNotFoundException("Lawyer not found: " + lawyerId));
 
         return mapToLawyerDto(lawyer);
     }
@@ -268,12 +264,9 @@ public class LawyerService {
             );
         }
 
-        LawyerEntity lawyer =
-                lawyerRepository.findByLawyerCode(lawyerId)
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Lawyer not found"
-                                ));
+        LawyerEntity lawyer = lawyerRepository.findById(lawyerId)
+                .or(() -> lawyerRepository.findByLawyerCode(lawyerId))
+                .orElseThrow(() -> new ResourceNotFoundException("Lawyer not found: " + lawyerId));
 
         lawyer.setVerificationStatus(
                 request.getVerificationStatus()
@@ -296,8 +289,8 @@ public class LawyerService {
 
         LawyerDto dto = new LawyerDto();
 
-        // Public lawyer ID
-        dto.setId(lawyer.getLawyerCode());
+        // Primary ID matches database entity (e.g. lawyer-1 or UUID) for seamless booking
+        dto.setId(lawyer.getId() != null ? lawyer.getId() : lawyer.getLawyerCode());
 
         // Same public code exposed separately
         dto.setLawyerCode(lawyer.getLawyerCode());

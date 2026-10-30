@@ -20,10 +20,15 @@ public class JwtUtil {
     private final SecretKey secretKey;
     private final long expirationMs;
 
+    private static final String DEFAULT_SECRET = "legalconnect_super_secret_key_for_jwt_token_generation_2026_secure_key_min_256_bits!";
+
     public JwtUtil(
             @Value("${app.jwt.secret:legalconnect_super_secret_key_for_jwt_token_generation_2026_secure_key_min_256_bits!}") String secret,
             @Value("${app.jwt.expiration-ms:86400000}") long expirationMs) {
-        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        String effectiveSecret = (secret != null && secret.trim().length() >= 32)
+                ? secret.trim()
+                : DEFAULT_SECRET;
+        this.secretKey = Keys.hmacShaKeyFor(effectiveSecret.getBytes(StandardCharsets.UTF_8));
         this.expirationMs = expirationMs;
     }
 

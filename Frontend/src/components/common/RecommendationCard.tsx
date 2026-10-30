@@ -9,7 +9,7 @@ export function RecommendationCard({ lawyer, rec }: { lawyer: Lawyer; rec: Recom
     <article className="card">
       <div className="row" style={{ justifyContent: 'space-between' }}>
         <h3 style={{ margin: 0 }}>{lawyer.fullName}</h3>
-        <span className="badge">{rec.matchPercentage}% match (backend-mock)</span>
+        <span className="badge">{rec.matchPercentage}% match</span>
       </div>
       <p className="muted">{lawyer.specialization} · {lawyer.location} · {formatFee(lawyer.consultationFee)}</p>
       <RatingStars value={rec.rating} />

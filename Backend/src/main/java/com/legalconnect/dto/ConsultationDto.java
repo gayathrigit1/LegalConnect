@@ -17,6 +17,8 @@ public class ConsultationDto {
     private String description;
     private ConsultationType type;
     private ConsultationStatus status;
+    private String paymentStatus = "UNPAID";
+    private String paymentId;
     private String createdAt;
 
     public ConsultationDto() {
@@ -116,6 +118,22 @@ public class ConsultationDto {
 
     public void setStatus(ConsultationStatus status) {
         this.status = status;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public String getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
     }
 
     public String getCreatedAt() {

@@ -2,6 +2,7 @@ package com.legalconnect.config;
 
 import com.legalconnect.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -68,11 +69,22 @@ public class SecurityConfig {
                 .requestMatchers("/api/public/**")
                 .permitAll()
 
+                // Browse lawyers and profiles without auth (needed for find-lawyer screens)
+                .requestMatchers("/api/lawyers/browse").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/lawyers/*").permitAll()
+
                 // Swagger
                 .requestMatchers(
                     "/v3/api-docs/**",
                     "/swagger-ui/**",
                     "/swagger-ui.html"
+                )
+                .permitAll()
+
+                // Razorpay Webhook & Public Payment Config
+                .requestMatchers(
+                    "/api/payments/webhook",
+                    "/api/payments/config"
                 )
                 .permitAll()
 

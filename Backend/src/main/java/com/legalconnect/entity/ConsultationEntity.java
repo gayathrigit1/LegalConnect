@@ -52,6 +52,12 @@ public class ConsultationEntity {
     @Column(name = "status", nullable = false, length = 32)
     private ConsultationStatus status = ConsultationStatus.PENDING;
 
+    @Column(name = "payment_status", length = 32)
+    private String paymentStatus = "UNPAID";
+
+    @Column(name = "payment_id", length = 64)
+    private String paymentId;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
 
@@ -152,6 +158,22 @@ public class ConsultationEntity {
 
     public void setStatus(ConsultationStatus status) {
         this.status = status;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public String getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
     }
 
     public Instant getCreatedAt() {

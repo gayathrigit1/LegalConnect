@@ -1,4 +1,4 @@
-export type UserRole = 'user' | 'lawyer' | 'admin';
+﻿export type UserRole = 'user' | 'lawyer' | 'admin';
 
 export type VerificationStatus = 'pending' | 'verified' | 'rejected';
 
@@ -96,6 +96,8 @@ export interface Consultation {
   description: string;
   type: ConsultationType;
   status: ConsultationStatus;
+  paymentStatus?: 'UNPAID' | 'PAID' | 'PENDING' | 'FAILED';
+  paymentId?: string;
   createdAt: string;
 }
 
@@ -120,7 +122,7 @@ export interface Recommendation {
   rating: number;
   availability: AvailabilityStatus;
   explanation: string;
-  source: 'backend-mock';
+  source: string;
 }
 
 export interface AiAnalysisResult {
@@ -130,7 +132,7 @@ export interface AiAnalysisResult {
   keyPoints: string[];
   recommendation: string;
   disclaimer: string;
-  source: 'backend-mock';
+  source: string;
 }
 
 export interface NotificationItem {
@@ -182,3 +184,47 @@ export interface AdminStats {
   totalReviews: number;
   openCases: number;
 }
+
+export type PaymentStatus = 'CREATED' | 'PENDING' | 'SUCCESS' | 'FAILED' | 'REFUNDED';
+
+export interface PaymentRecord {
+  id: string;
+  userId: string;
+  userName?: string;
+  consultationId: string;
+  caseTitle?: string;
+  lawyerId: string;
+  lawyerName?: string;
+  amount: number;
+  amountInPaise: number;
+  currency: string;
+  razorpayOrderId: string;
+  razorpayPaymentId?: string;
+  status: PaymentStatus;
+  paymentMethod?: string;
+  failureReason?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateOrderResponse {
+  orderId: string;
+  amount: number;
+  amountInPaise: number;
+  currency: string;
+  keyId: string;
+  consultationId: string;
+  lawyerId: string;
+  lawyerName: string;
+  userEmail: string;
+  userPhone: string;
+  userName: string;
+  paymentId: string;
+}
+
+export interface VerifyPaymentPayload {
+  razorpayOrderId: string;
+  razorpayPaymentId: string;
+  razorpaySignature: string;
+}
+

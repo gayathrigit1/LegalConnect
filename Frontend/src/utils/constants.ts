@@ -28,6 +28,7 @@ export const NAV = {
     { to: '/app/lawyers', label: 'Find Lawyers' },
     { to: '/app/compare', label: 'Compare Lawyers' },
     { to: '/app/consultations', label: 'Consultations' },
+    { to: '/app/payments', label: 'Payment History' },
     { to: '/app/reviews', label: 'Reviews' },
     { to: '/app/profile', label: 'Profile' },
   ],

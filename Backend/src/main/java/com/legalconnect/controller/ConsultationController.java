@@ -24,7 +24,7 @@ public class ConsultationController {
         this.consultationService = consultationService;
     }
 
-    @PostMapping
+    @PostMapping({"", "/"})
     @Operation(summary = "Create consultation request", description = "Create a new consultation request (User only)")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ConsultationDto> createConsultation(@Valid @RequestBody ConsultationRequestPayload request, Authentication authentication) {
@@ -32,7 +32,7 @@ public class ConsultationController {
         return ResponseEntity.ok(consultation);
     }
 
-    @GetMapping("/my-consultations")
+    @GetMapping({"", "/", "/my-consultations"})
     @Operation(summary = "Get my consultations", description = "Get consultations for the authenticated user or lawyer")
     public ResponseEntity<List<ConsultationDto>> getMyConsultations(Authentication authentication) {
         List<ConsultationDto> consultations = consultationService.getMyConsultations(authentication);

@@ -15,6 +15,7 @@ import { LawyerProfilePage } from './pages/user/LawyerProfilePage';
 import { CompareLawyersPage } from './pages/user/CompareLawyersPage';
 import { ConsultationsPage } from './pages/user/ConsultationsPage';
 import { ConsultationDetailsPage } from './pages/user/ConsultationDetailsPage';
+import { PaymentHistoryPage } from './pages/user/PaymentHistoryPage';
 import { ReviewsPage } from './pages/user/ReviewsPage';
 import { UserProfilePage } from './pages/user/UserProfilePage';
 import { LawyerDashboard } from './pages/lawyer/LawyerDashboard';
@@ -53,6 +54,7 @@ export default function App() {
           <Route path="/app/compare" element={<CompareLawyersPage />} />
           <Route path="/app/consultations" element={<ConsultationsPage />} />
           <Route path="/app/consultations/:id" element={<ConsultationDetailsPage role="user" />} />
+          <Route path="/app/payments" element={<PaymentHistoryPage />} />
           <Route path="/app/reviews" element={<ReviewsPage />} />
           <Route path="/app/profile" element={<UserProfilePage />} />
         </Route>
